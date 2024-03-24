@@ -89,7 +89,7 @@ export default function PinComponent(props: Props) {
 			x={pxBoardStart + x * pixelsPerMM}
 			y={viewHeight * .2}
 			sceneFunc={draw}
-			fill="white"
+			fill="#ffff00aa"
 			stroke={selected ? 'blue' : undefined}
 			draggable
 			dragBoundFunc={dragBound}

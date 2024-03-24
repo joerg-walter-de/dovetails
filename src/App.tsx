@@ -11,6 +11,7 @@ import PinCreator from './ui/PinCreator';
 import PinEditor from './ui/PinEditor';
 import Generate from './ui/Generate';
 import Visualizer from './visualize/Visualizer';
+import Readings from './ui/Readings';
 
 export default function App() {
 	return (
@@ -32,6 +33,7 @@ export default function App() {
 						<PinCreator />
 						<PinEditor />
 						<HalfPinEditor />
+						<Readings />
 					</div>
 				</div>
 			</div>

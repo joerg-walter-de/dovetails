@@ -11,7 +11,9 @@ import Board from './Board';
 import Guide from './Guide';
 import HalfPins from './HalfPins';
 import Pin from './Pin';
+import PinAnchorDotComponent from './PinAnchorDot';
 import ShoulderIndicator from './ShoulderIndicator';
+import BoardAnchorDotComponent from './BoardAnchorDot';
 
 function useSize(target: React.RefObject<HTMLDivElement>) {
 	const [size, setSize] = useState<DOMRect | null>();
@@ -136,13 +138,55 @@ export default function Visualizer() {
 				},
 			);
 
+		const renderedPotAnchorDots = [...pins]
+			.sort((a, b) => a.x - b.x)
+			.map(
+				(pin, i, ps) => {
+					let minX = pin.maxWidth / 2
+						+ halfPinWidth
+						+ (halfPins.enabled ? minSpacing : 0);
+					if (i > 0) {
+						const previous = ps[i - 1];
+						minX = previous.x
+							+ previous.maxWidth / 2
+							+ pin.maxWidth / 2
+							+ minSpacing;
+					}
+
+					let maxX = material.width
+						- pin.maxWidth / 2
+						- halfPinWidth
+						- (halfPins.enabled ? minSpacing : 0);
+					if (i < ps.length - 1) {
+						const next = ps[i + 1];
+						maxX = next.x
+							- next.maxWidth / 2
+							- pin.maxWidth / 2
+							- minSpacing;
+					}
+
+					return (
+						<PinAnchorDotComponent
+							key={i}
+							minX={minX}
+							maxX={maxX}
+							{...pin}
+							{...commonProps}
+						/>
+					);
+				},
+			);
+
 		stage = (
 			<Stage width={size.width} height={size.height}>
 				<Layer>
 					<Board {...commonProps} />
 					{renderedHalfPins}
 					{renderedPins}
+					{renderedPotAnchorDots}
 					{guides}
+					<BoardAnchorDotComponent isStart={true} {...commonProps} />
+					<BoardAnchorDotComponent isStart={false} {...commonProps} />
 					<ShoulderIndicator {...commonProps} />
 				</Layer>
 			</Stage>
