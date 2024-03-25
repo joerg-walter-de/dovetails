@@ -18,6 +18,7 @@ export enum AutolayoutMethod {
 	EvenSpacing = 'even',
 	FixedPins = 'pins',
 	FixedTails = 'tails',
+	FixedCutDistances = 'cuts',
 }
 
 const PinSchema = z.object(

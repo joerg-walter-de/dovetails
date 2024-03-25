@@ -24,12 +24,16 @@ export default function AutoLayout() {
 		{value: AutolayoutMethod.EvenSpacing, label: 'Even Spacing'},
 		{value: AutolayoutMethod.FixedPins, label: 'Fixed Pins'},
 		{value: AutolayoutMethod.FixedTails, label: 'Fixed Tails'},
+		{value: AutolayoutMethod.FixedCutDistances, label: 'Fixed Cut Distances'},
 	];
 
 	const tangent = Math.tan(2 * cutter.angle * Math.PI / 360);
 	const overlap = material.thickness * tangent;
 	let minTailWidth = minSpacing + 2 * overlap;
 	minTailWidth = Math.ceil(minTailWidth * 10) / 10;
+
+	let minCutDistance = minSpacing + 2 * overlap;
+	minCutDistance = Math.ceil(minCutDistance * 10) / 10;
 
 	function onMethodChange(newMethod: string) {
 		switch (newMethod) {
@@ -45,6 +49,10 @@ export default function AutoLayout() {
 			case 'tails':
 				setCount(2);
 				setWidth(minTailWidth);
+				break;
+			case 'cuts':
+				setCount(2);
+				setWidth(minCutDistance);
 				break;
 
 			default:
@@ -177,6 +185,52 @@ export default function AutoLayout() {
 					<TextRow
 						id="tail_width_input"
 						label="Tail Width"
+						value={width}
+						onChange={(width) => setWidth(width)}
+						step={0.1}
+						min={minTailWidth}
+					/>
+				</FormSection>
+			);
+
+			break;
+		case 'cuts':
+			availableSpace += 2 * overlap;
+			maxCount = Math.floor(
+				(availableSpace - minWidth) / (width + minWidth),
+			) + 1;
+
+			if (count > 0 && count <= maxCount) {
+				onSubmit = () => {
+					dispatch(
+						autolayout(
+							method,
+							count,
+							width,
+							material,
+							cutter,
+							halfPins,
+						),
+					);
+				};
+			}
+
+			settingsUI = (
+				<FormSection>
+					<TextRow
+						id="tail_count_input"
+						label="Tail Count"
+						value={count}
+						onChange={(count) => setCount(count)}
+						step={1}
+						min={2}
+						max={maxCount}
+						dimensionless
+						integer
+					/>
+					<TextRow
+						id="cut_distance_input"
+						label="Cut DIstance"
 						value={width}
 						onChange={(width) => setWidth(width)}
 						step={0.1}
