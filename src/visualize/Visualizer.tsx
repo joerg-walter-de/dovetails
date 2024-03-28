@@ -138,13 +138,16 @@ export default function Visualizer() {
 				},
 			);
 
-		const renderedPotAnchorDots = [...pins]
+		const renderedPinAnchorDots = [...pins]
 			.sort((a, b) => a.x - b.x)
 			.map(
 				(pin, i, ps) => {
+
 					let minX = pin.maxWidth / 2
 						+ halfPinWidth
 						+ (halfPins.enabled ? minSpacing : 0);
+
+
 					if (i > 0) {
 						const previous = ps[i - 1];
 						minX = previous.x
@@ -164,11 +167,12 @@ export default function Visualizer() {
 							- pin.maxWidth / 2
 							- minSpacing;
 					}
+					console.log(`renderedPinAnchorDots: ${minX}`);
 
 					return (
 						<PinAnchorDotComponent
 							key={i}
-							minX={minX}
+							bottomStartX={minX}
 							maxX={maxX}
 							{...pin}
 							{...commonProps}
@@ -183,7 +187,7 @@ export default function Visualizer() {
 					<Board {...commonProps} />
 					{renderedHalfPins}
 					{renderedPins}
-					{renderedPotAnchorDots}
+					{renderedPinAnchorDots}
 					{guides}
 					<BoardAnchorDotComponent isStart={true} {...commonProps} />
 					<BoardAnchorDotComponent isStart={false} {...commonProps} />
