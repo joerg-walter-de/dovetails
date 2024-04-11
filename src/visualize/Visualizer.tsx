@@ -15,6 +15,33 @@ import PinAnchorDotComponent from './PinAnchorDot';
 import ShoulderIndicator from './ShoulderIndicator';
 import BoardAnchorDotComponent from './BoardAnchorDot';
 
+import { Joint, ConstructConfig, LayoutConfig, LengthUnit } from '../context/Joint';
+
+const config: ConstructConfig = {
+	materialThickness: 20,
+	materialWidth: 200,
+	lengthUnit: LengthUnit.MM
+};
+
+let joint = new Joint(config);
+
+const layoutConfig: LayoutConfig = {
+	createHalfPins: true,
+	halfPinWidth: 16,
+	angle_deg: 10,
+	layoutType: 'fixed_tail_width',
+	layoutParams: {
+		tailsCount: 4,
+		tailWidth: 40,
+		pinWidth: -1
+	}
+
+};
+
+joint.layout(layoutConfig);
+
+console.log(JSON.stringify(joint));
+
 function useSize(target: React.RefObject<HTMLDivElement>) {
 	const [size, setSize] = useState<DOMRect | null>();
 	useLayoutEffect(
